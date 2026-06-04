@@ -1,0 +1,42 @@
+{
+  "@context": {
+    "schema": "https://schema.org/",
+    "ucsi": "https://www.ucsiuniversity.edu.my/vocab#",
+    "@vocab": "https://www.ucsiuniversity.edu.my/vocab#",
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "logo": "schema:logo",
+    "address": "schema:address",
+    "telephone": "schema:telephone",
+    "sameAs": "schema:sameAs",
+    "Organization": "schema:CollegeOrUniversity",
+    "University": "schema:CollegeOrUniversity",
+    "Library": {
+      "@id": "schema:Library",
+      "@type": "@id"
+    },
+    "catalog": {
+      "@id": "schema:hasPart",
+      "@type": "@id"
+    },
+    "humanURL": "schema:url",
+    "documentation": {
+      "@id": "schema:documentation",
+      "@type": "@id"
+    }
+  },
+  "@type": "Organization",
+  "name": "UCSI University",
+  "url": "https://www.ucsiuniversity.edu.my/",
+  "description": "Private multi-campus university in Malaysia operating a Koha-based library catalog (OPAC). No public developer portal or documented API confirmed.",
+  "sameAs": [
+    "https://www.linkedin.com/school/ucsi-education/"
+  ],
+  "catalog": {
+    "@type": "Library",
+    "name": "UCSI University Library Catalog (Koha)",
+    "url": "https://koha.ucsiuniversity.edu.my/",
+    "documentation": "https://lib.ucsiuniversity.edu.my/"
+  }
+}
