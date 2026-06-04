@@ -1,0 +1,58 @@
+---
+aid: ucsi
+name: UCSI University
+description: >-
+  UCSI University is a private, multi-campus university in Malaysia (Kuala Lumpur,
+  Terengganu and Sarawak) ranked #265 in the QS World University Rankings 2025.
+  It operates student-facing digital services including a student portal and
+  mobile apps and runs a Koha-based library catalog, but UCSI does not publish a
+  public developer portal or documented, openly accessible APIs. The systems that
+  exist (portal, mobile-app backends, identity) are gated behind authentication
+  and a web application firewall, so no public API endpoints could be confirmed
+  during this review.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/ucsi/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Malaysia
+  - Library
+  - Koha
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: ucsi:library-catalog
+    name: UCSI University Library Catalog (Koha)
+    description: >-
+      The UCSI University Library runs a Koha open-source integrated library
+      system (OPAC) at koha.ucsiuniversity.edu.my. Koha software can expose
+      OAI-PMH and ILS-DI / REST web services, but during this review the host
+      returned HTTP 403 to automated requests and no public OAI-PMH, ILS-DI, or
+      REST endpoint could be confirmed as enabled. Listed for discovery only; no
+      public API contract is documented.
+    humanURL: https://koha.ucsiuniversity.edu.my/
+    tags: [ Library, Koha, Catalog, OPAC ]
+    properties:
+      - type: Documentation
+        url: https://lib.ucsiuniversity.edu.my/
+common:
+  - type: Website
+    url: https://www.ucsiuniversity.edu.my/
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/ucsi-education/
+  - type: Plans
+    url: plans/ucsi-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/ucsi-rate-limits.yml
+  - type: FinOps
+    url: finops/ucsi-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
