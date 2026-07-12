@@ -1,0 +1,21 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.ucsiuniversity.edu.my
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  6 00:27:52 2026 GMT
+  hsts: false
+- host: koha.ucsiuniversity.edu.my
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  6 00:27:52 2026 GMT
+  hsts: null
+domains:
+- domain: ucsiuniversity.edu.my
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none

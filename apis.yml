@@ -41,6 +41,8 @@ apis:
       - type: Documentation
         url: https://lib.ucsiuniversity.edu.my/
 common:
+  - type: DomainSecurity
+    url: security/ucsi-domain-security.yml
   - type: Website
     url: https://www.ucsiuniversity.edu.my/
   - type: LinkedIn
