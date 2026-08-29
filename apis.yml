@@ -38,6 +38,9 @@ position: Consumer
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/ucsi.png
 url: https://raw.githubusercontent.com/api-evangelist/ucsi/refs/heads/main/apis.yml
+x-api-posture: docs-gated
+x-api-posture-basis: observed
+x-api-posture-note: "The systems that exist (portal, mobile-app backends, identity) are gated behind authentication and a web application firewall, so no public API endpoints could be confirmed during this review."
 tags:
   - Education
   - Higher Education
