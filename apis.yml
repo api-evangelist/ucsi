@@ -1,15 +1,26 @@
 ---
 aid: ucsi
 name: UCSI University
+x-type: university
+x-category: Private Research University
 description: >-
-  UCSI University is a private, multi-campus university in Malaysia (Kuala Lumpur,
-  Terengganu and Sarawak) ranked #265 in the QS World University Rankings 2025.
-  It operates student-facing digital services including a student portal and
-  mobile apps and runs a Koha-based library catalog, but UCSI does not publish a
-  public developer portal or documented, openly accessible APIs. The systems that
-  exist (portal, mobile-app backends, identity) are gated behind authentication
-  and a web application firewall, so no public API endpoints could be confirmed
-  during this review.
+  UCSI University is a private, multi-campus university in Kuala Lumpur, Terengganu and Sarawak,
+  Malaysia, established in 1986 and ranked #265 in the QS World University Rankings 2025. It operates
+  no developer portal, no public API programme, no open data portal, no institutional repository on
+  its own domain and no verifiable public code: the GitHub organisations matching "UCSI" carry no
+  identifying metadata and zero public repositories. Its entire ucsiuniversity.edu.my estate — the
+  main site, the library services site, the Koha catalogue, the IIS student portal, the alumni and
+  mobile hosts — sits behind a Cloudflare bot-management challenge that answers HTTP 403 to every
+  automated client, including one presenting full browser headers, so nothing hosted by the
+  institution can be read programmatically. Three surfaces are nonetheless established off-host: a
+  Microsoft Entra ID tenant (3c5f2d31-81d8-4455-a2bf-531fbc398144, branded "UCSI University") whose
+  SAML 2.0 and OpenID Connect metadata are publicly retrievable and which is the institution's own
+  identity provider; a CourseNetworking learning-management tenancy at ucsi.thecn.com that
+  lms.ucsiuniversity.edu.my redirects into; and a ROR registration. UCSI is NOT in eduGAIN and holds
+  no entity in Malaysia's SIFULAN federation, and no Crossref or DataCite membership exists under its
+  name. The Koha library catalogue is institution-operated and may expose OAI-PMH, ILS-DI or REST
+  services, but that cannot be confirmed through the bot challenge and is recorded as unverifiable
+  rather than as either present or absent.
 type: Index
 deliveryModel:
   model: saas
@@ -34,45 +45,183 @@ accessModel:
   - plans
   generated: '2026-07-22'
   method: derived
-position: Consumer
+position: Consuming
 access: 3rd-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/ucsi.png
 url: https://raw.githubusercontent.com/api-evangelist/ucsi/refs/heads/main/apis.yml
 x-api-posture: docs-gated
 x-api-posture-basis: observed
-x-api-posture-note: "The systems that exist (portal, mobile-app backends, identity) are gated behind authentication and a web application firewall, so no public API endpoints could be confirmed during this review."
+x-api-posture-note: "Every institution-hosted surface (portal, library catalogue, mobile, alumni, LMS vanity host) sits behind a Cloudflare bot challenge returning HTTP 403 to automated clients; no public API endpoint or developer documentation could be confirmed."
 tags:
   - Education
   - Higher Education
   - University
+  - Private University
   - Malaysia
+  - Asia
   - Library
+  - Library Catalog
   - Koha
+  - Identity Federation
+  - Learning Management
+  - Registry
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 specificationVersion: '0.23'
+x-coverage:
+  state: unreadable
+  reason: bot_blocked
+  detail: >-
+    UCSI's own hosts cannot be read by any automated client. Every probe against ucsiuniversity.edu.my
+    and its subdomains on 2026-09-01 returned HTTP 403 from Cloudflare — with a plain client and again
+    with a full Chrome User-Agent, Accept, Accept-Language and Upgrade-Insecure-Requests header set —
+    and the main site's response carries `cf-mitigated: challenge`. The hosts are LIVE (Google indexes
+    the Koha catalogue as "UCSI University Library catalog"); they are unreadable to us. That is a
+    finding about our access, not a claim that UCSI publishes nothing there, and the Koha OAI-PMH /
+    ILS-DI / REST question is therefore recorded as unverifiable in conformance/ rather than as absent.
+    The surfaces that COULD be read were all read off-host and are all recorded: the Entra ID identity
+    tenant, the CourseNetworking LMS tenancy, the ROR registration, and the confirmed absence of
+    eduGAIN/SIFULAN, Crossref and DataCite records. No contract was saved for any of them, because
+    none of them is UCSI's engineering.
+  evidence:
+    - url: https://www.ucsiuniversity.edu.my/
+      status: 403
+    - url: https://lib.ucsiuniversity.edu.my/
+      status: 403
+    - url: https://koha.ucsiuniversity.edu.my/
+      status: 403
+    - url: https://koha.ucsiuniversity.edu.my/cgi-bin/koha/oai.pl?verb=Identify
+      status: 403
+    - url: https://koha.ucsiuniversity.edu.my/api/v1/
+      status: 403
+    - url: https://iis.ucsiuniversity.edu.my/
+      status: 403
+    - url: https://www.ucsiuniversity.edu.my/llms.txt
+      status: 403
+    - url: https://www.ucsiuniversity.edu.my/.well-known/security.txt
+      status: 403
+    - url: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+      status: 200
+    - url: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+      status: 200
+    - url: https://ucsi.thecn.com/
+      status: 200
+    - url: https://api.ror.org/v2/organizations/019787q29
+      status: 200
+    - url: https://api.crossref.org/members?query=UCSI
+      status: 200
+    - url: https://api.datacite.org/clients?query=UCSI
+      status: 200
+    - url: https://md.seamlessaccess.org/entities/?q=ucsi
+      status: 200
+    - url: https://api.ucsiuniversity.edu.my/
+      status: 0
+    - url: https://developer.ucsiuniversity.edu.my/
+      status: 0
+    - url: https://data.ucsiuniversity.edu.my/
+      status: 0
+    - url: https://courses.ucsiuniversity.edu.my/
+      status: 0
 apis:
   - aid: ucsi:library-catalog
     name: UCSI University Library Catalog (Koha)
+    x-operator: institution
     description: >-
-      The UCSI University Library runs a Koha open-source integrated library
-      system (OPAC) at koha.ucsiuniversity.edu.my. Koha software can expose
-      OAI-PMH and ILS-DI / REST web services, but during this review the host
-      returned HTTP 403 to automated requests and no public OAI-PMH, ILS-DI, or
-      REST endpoint could be confirmed as enabled. Listed for discovery only; no
-      public API contract is documented.
+      The Tan Sri Musa Mohamad Library runs a Koha open-source integrated library system whose OPAC is
+      served from koha.ucsiuniversity.edu.my — UCSI's own registrable domain, so the deployment is the
+      institution's even though the software is the Koha community's. The catalogue is live and
+      publicly indexed (its title is "UCSI University Library catalog"), but Cloudflare answers HTTP
+      403 to every automated request against the host, so none of the machine interfaces Koha can
+      expose — OAI-PMH 2.0 at /cgi-bin/koha/oai.pl, ILS-DI at /cgi-bin/koha/ilsdi.pl, the REST API at
+      /api/v1 — could be confirmed as enabled or as disabled. Listed as a real institution-operated
+      surface whose contract is unverifiable; no OpenAPI is registered here because none was seen, and
+      none was generated because generating one would credit UCSI with a document nobody has read.
     humanURL: https://koha.ucsiuniversity.edu.my/
-    tags: [ Library, Koha, Catalog, OPAC ]
+    tags: [ Library, Library Catalog, Koha, OPAC ]
     properties:
       - type: Documentation
         url: https://lib.ucsiuniversity.edu.my/
+      - type: Conformance
+        url: conformance/ucsi-conformance.yml
+  - aid: ucsi:entra-identity-federation
+    name: UCSI University Identity Federation (Microsoft Entra ID)
+    x-operator: federation
+    description: >-
+      UCSI operates a Microsoft Entra ID tenant, 3c5f2d31-81d8-4455-a2bf-531fbc398144, region AS,
+      whose FederationBrandName is "UCSI University" and whose realm for ucsiuniversity.edu.my is
+      NameSpaceType "Managed" — cloud-native, not federated to an on-premises AD FS. Both its signed
+      SAML 2.0 federation metadata (entityID https://sts.windows.net/3c5f2d31-81d8-4455-a2bf-531fbc398144/,
+      IDPSSODescriptor, HTTP-POST and HTTP-Redirect SSO bindings, 28KB) and its OpenID Connect
+      discovery document (RS256, scopes openid/profile/email/offline_access, authorization-code,
+      implicit and device-code response types) are publicly retrievable, which makes this the only
+      machine-readable identity surface UCSI has and the single strongest programmable surface in this
+      profile. A federation is shared by definition and the IdP behind it is the institution's; the
+      contract is Microsoft's and is not saved here. UCSI has NO entity in eduGAIN and none in
+      Malaysia's SIFULAN federation, so Entra ID is the whole of the federation story.
+    humanURL: https://www.ucsiuniversity.edu.my/
+    baseURL: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/v2.0
+    tags: [ Identity Federation, SAML, OpenID Connect, Entra ID, Single Sign-On ]
+    properties:
+      - type: IdentityFederation
+        url: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+      - type: OpenIDConnectDiscovery
+        url: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+      - type: Authentication
+        url: authentication/ucsi-authentication.yml
+      - type: Conformance
+        url: conformance/ucsi-conformance.yml
+  - aid: ucsi:lms-coursenetworking
+    name: UCSI University LMS Tenancy (CourseNetworking)
+    x-operator: tenant
+    description: >-
+      UCSI's learning management system is a tenancy on CourseNetworking (The CN): the institution
+      host lms.ucsiuniversity.edu.my is a CNAME to ucsi.thecn.com and redirects there with HTTP 301,
+      landing on a UCSI-branded CourseNetworking sign-in for students and staff. The tenancy is a real
+      institutional fact — UCSI's courses, UCSI's users, UCSI's branding — and it is recorded as the
+      relationship it is. CourseNetworking's platform and any API it offers belong to CourseNetworking,
+      and no vendor contract is saved under UCSI's slug.
+    humanURL: https://ucsi.thecn.com/
+    tags: [ Learning Management, LMS, CourseNetworking, Tenancy ]
+    properties:
+      - type: Website
+        url: https://ucsi.thecn.com/
+      - type: Conformance
+        url: conformance/ucsi-conformance.yml
+  - aid: ucsi:ror-registration
+    name: UCSI University ROR Registration
+    x-operator: registry
+    description: >-
+      UCSI University is registered in the Research Organization Registry as ror.org/019787q29, active,
+      located in Kuala Lumpur, Malaysia, established 1986, typed education and funder, and cross-walked
+      to Crossref Funder ID 100031258, GRID grid.444472.5, ISNI 0000 0004 1756 3061 and Wikidata
+      Q7864125. A registration the institution holds, not a contract it operates: the ROR API is never
+      saved as theirs, and the entry is never deleted for being on a shared host. No matching Crossref
+      member and no DataCite repository client exist under the UCSI name.
+    humanURL: https://ror.org/019787q29
+    baseURL: https://api.ror.org/v2/organizations/019787q29
+    tags: [ Registry, Organization Identifier, ROR ]
+    properties:
+      - type: Registration
+        url: https://api.ror.org/v2/organizations/019787q29
+      - type: Conformance
+        url: conformance/ucsi-conformance.yml
 common:
-  - type: DomainSecurity
-    url: security/ucsi-domain-security.yml
   - type: Website
     url: https://www.ucsiuniversity.edu.my/
+  - type: LibraryCatalog
+    url: https://koha.ucsiuniversity.edu.my/
+  - type: IdentityFederation
+    url: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
   - type: LinkedIn
     url: https://www.linkedin.com/school/ucsi-education/
+  - type: Conformance
+    url: conformance/ucsi-conformance.yml
+  - type: Authentication
+    url: authentication/ucsi-authentication.yml
+  - type: JSONLD
+    url: json-ld/ucsi-context.jsonld
+  - type: DomainSecurity
+    url: security/ucsi-domain-security.yml
   - type: Plans
     url: plans/ucsi-plans-pricing.yml
   - type: RateLimits
