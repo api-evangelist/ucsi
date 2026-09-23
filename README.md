@@ -64,7 +64,9 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-UCSI University is a private, multi-campus university in Malaysia (Kuala Lumpur, Terengganu and Sarawak), ranked #265 in the QS World University Rankings 2025. This repository catalogs UCSI University's public developer/API footprint as an [APIs.json](https://apisjson.org) profile. UCSI does not publish a public developer portal or documented, openly accessible APIs; the systems that exist (student portal, mobile-app backends, identity, and a Koha library catalog) are gated behind authentication and a web application firewall.
+UCSI University is a private, multi-campus university in Kuala Lumpur, Terengganu and Sarawak, Malaysia, established in 1986 and ranked #265 in the QS World University Rankings 2025. This repository catalogs UCSI University's public developer/API footprint as an [APIs.json](https://apisjson.org) profile, under the API Evangelist university pipeline — which settles **who operates** each surface before recording it, because a university is a federation of buyers rather than a producer.
+
+UCSI operates no developer portal, no public API programme, no open data portal, no institutional repository on its own domain, and no verifiable public code. Its entire `ucsiuniversity.edu.my` estate sits behind a Cloudflare bot-management challenge that answers HTTP 403 to every automated client, so nothing it hosts can be read programmatically. Three surfaces were established off-host: a Microsoft Entra ID identity tenant that is the institution's own IdP, a CourseNetworking LMS tenancy, and a ROR registration.
 
 - APIs.json: https://raw.githubusercontent.com/api-evangelist/ucsi/refs/heads/main/apis.yml
 - Run with Naftiko: https://github.com/naftiko/fleet?utm_source=api-evangelist&utm_medium=readme&utm_campaign=ucsi-api-evangelist&utm_content=repo
@@ -74,49 +76,57 @@ UCSI University is a private, multi-campus university in Malaysia (Kuala Lumpur,
 - Index
 - Consumer
 - 3rd-Party
+- x-type: university
+- x-category: Private Research University
 
 ## Tags
 
-Education, Higher Education, University, Malaysia, Library, Koha
+Education, Higher Education, University, Private University, Malaysia, Asia, Library, Library Catalog, Koha, Identity Federation, Learning Management, Registry
 
-## APIs
+## Surfaces
 
-- **UCSI University Library Catalog (Koha)** — Koha-based library OPAC at https://koha.ucsiuniversity.edu.my/. Koha can expose OAI-PMH and ILS-DI / REST web services, but no public endpoint could be confirmed as enabled during review. Docs: https://lib.ucsiuniversity.edu.my/
+Every entry carries an `x-operator` saying who runs the thing it describes.
 
-No public developer portal or documented APIs were found beyond the gated/library systems above.
+- **UCSI University Library Catalog (Koha)** — `x-operator: institution`. Koha ILS on UCSI's own host, https://koha.ucsiuniversity.edu.my/. Koha can expose OAI-PMH, ILS-DI and a `/api/v1` REST API; whether UCSI has them enabled is **unverifiable** — Cloudflare returns 403 to automated clients. No OpenAPI is registered, and none was generated.
+- **UCSI University Identity Federation (Microsoft Entra ID)** — `x-operator: federation`. Tenant `3c5f2d31-81d8-4455-a2bf-531fbc398144`, FederationBrandName "UCSI University", Managed realm. Signed SAML 2.0 IdP metadata and an OpenID Connect discovery document are publicly retrievable. The strongest programmable surface in this profile; the contract is Microsoft's and is not saved here.
+- **UCSI University LMS Tenancy (CourseNetworking)** — `x-operator: tenant`. `lms.ucsiuniversity.edu.my` CNAMEs and 301s to https://ucsi.thecn.com/. The tenancy is UCSI's; the platform and any API are CourseNetworking's.
+- **UCSI University ROR Registration** — `x-operator: registry`. https://ror.org/019787q29 — a registration the institution holds, never a contract it operates.
 
-## Plans
+Confirmed absences: no UCSI entity in the eduGAIN metadata aggregate and none in Malaysia's SIFULAN federation; no Crossref member; no DataCite repository client; no verifiable official GitHub organisation.
+
+## Conformance (Kin Score `education` regime)
+
+- [conformance/ucsi-conformance.yml](conformance/ucsi-conformance.yml) — `saml` conformant (Entra ID IdP metadata); `oai-pmh` and `lti` unverifiable; `shibboleth`, `crossref`, `datacite`, `scim`, `oneroster`, `ed-fi`, `caliper`, `qti`, `orcid` not found.
+- [authentication/ucsi-authentication.yml](authentication/ucsi-authentication.yml) — the tenant's OIDC and SAML 2.0 endpoints, probed.
+
+## Plans / Rate Limits / FinOps
 
 - [plans/ucsi-plans-pricing.yml](plans/ucsi-plans-pricing.yml)
-
-## Rate Limits
-
 - [rate-limits/ucsi-rate-limits.yml](rate-limits/ucsi-rate-limits.yml)
-
-## FinOps
-
 - [finops/ucsi-finops.yml](finops/ucsi-finops.yml)
 
 ## Timestamps
 
 - Created: 2026-06-03
-- Modified: 2026-06-03
+- Modified: 2026-09-01
 
 ## Common Properties
 
 - Website: https://www.ucsiuniversity.edu.my/
+- Library Catalog: https://koha.ucsiuniversity.edu.my/
+- Identity Federation: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
 - LinkedIn: https://www.linkedin.com/school/ucsi-education/
-- Plans: [plans/ucsi-plans-pricing.yml](plans/ucsi-plans-pricing.yml)
-- Rate Limits: [rate-limits/ucsi-rate-limits.yml](rate-limits/ucsi-rate-limits.yml)
-- FinOps: [finops/ucsi-finops.yml](finops/ucsi-finops.yml)
+- Conformance: [conformance/ucsi-conformance.yml](conformance/ucsi-conformance.yml)
+- Authentication: [authentication/ucsi-authentication.yml](authentication/ucsi-authentication.yml)
+- JSON-LD: [json-ld/ucsi-context.jsonld](json-ld/ucsi-context.jsonld)
+- Domain Security: [security/ucsi-domain-security.yml](security/ucsi-domain-security.yml)
 - Review: [review.yml](review.yml)
 
 ## Notes
 
-- Verification caveats: The official website (https://www.ucsiuniversity.edu.my/), Library Services (https://lib.ucsiuniversity.edu.my/), and Koha catalog (https://koha.ucsiuniversity.edu.my/) are all live in a browser but return HTTP 403 to automated requests due to a web application firewall.
-- Potential Koha OAI-PMH, ILS-DI, and REST endpoints were probed but could not be confirmed as publicly enabled (all returned 403).
-- No official UCSI University GitHub organization was found.
-- No endpoints were fabricated; only confirmed URLs are listed.
+- **Coverage: unreadable / bot_blocked.** www, lib, koha, iis, apps, alumni, library and m under `ucsiuniversity.edu.my` all return HTTP 403 from Cloudflare (`cf-mitigated: challenge`), with a plain client and again with full Chrome browser headers. The hosts are live for humans; they are unreadable to clients. That is a finding about our access, not a claim that UCSI publishes nothing.
+- `api.`, `developer.`, `data.`, `courses.`, `portal.`, `idp.` and `journals.` under `ucsiuniversity.edu.my` have no DNS record at all.
+- No endpoints were fabricated and no contract was generated. Every status code in `review.yml` and `apis.yml` `x-coverage` came from a live probe on 2026-09-01.
 
 ## Maintainers
 

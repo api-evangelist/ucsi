@@ -10,6 +10,8 @@
     "address": "schema:address",
     "telephone": "schema:telephone",
     "sameAs": "schema:sameAs",
+    "identifier": "schema:identifier",
+    "foundingDate": "schema:foundingDate",
     "Organization": "schema:CollegeOrUniversity",
     "University": "schema:CollegeOrUniversity",
     "Library": {
@@ -27,10 +29,22 @@
     }
   },
   "@type": "Organization",
+  "@id": "https://ror.org/019787q29",
   "name": "UCSI University",
   "url": "https://www.ucsiuniversity.edu.my/",
-  "description": "Private multi-campus university in Malaysia operating a Koha-based library catalog (OPAC). No public developer portal or documented API confirmed.",
+  "foundingDate": "1986",
+  "description": "Private multi-campus university in Kuala Lumpur, Malaysia. Operates a Koha-based library catalogue on its own domain and a Microsoft Entra ID identity tenant; its learning management system is a CourseNetworking tenancy. No public developer portal, open data portal or documented API was confirmed, and the institution's own hosts return HTTP 403 to automated clients behind a Cloudflare bot challenge.",
+  "identifier": [
+    "https://ror.org/019787q29",
+    "grid.444472.5",
+    "0000 0004 1756 3061",
+    "Q7864125",
+    "https://doi.org/10.13039/100031258"
+  ],
   "sameAs": [
+    "https://ror.org/019787q29",
+    "https://www.wikidata.org/wiki/Q7864125",
+    "https://en.wikipedia.org/wiki/UCSI_University",
     "https://www.linkedin.com/school/ucsi-education/"
   ],
   "catalog": {

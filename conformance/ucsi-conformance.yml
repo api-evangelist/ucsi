@@ -1,0 +1,130 @@
+---
+name: UCSI University Domain Standard Conformance
+description: >-
+  Conformance of UCSI University's surfaces against the Kin Score `education` regulatory regime
+  standards[]. Every entry was probed live on 2026-09-01. UCSI serves its entire ucsiuniversity.edu.my
+  estate from behind a Cloudflare bot-management challenge that returns HTTP 403 to every automated
+  client, including one sending a full browser User-Agent and browser headers, so anything that would
+  have to be read off an institution host is recorded as UNVERIFIABLE rather than as absent. Negative
+  and unverifiable results are recorded as explicitly as positive ones: an absent standard is a
+  measurement, not a gap to be filled.
+regime: education
+generated: '2026-09-01'
+method: probed
+source: >-
+  live probes of ucsiuniversity.edu.my hosts, login.microsoftonline.com, api.ror.org,
+  api.crossref.org, api.datacite.org, mds.edugain.org, md.seamlessaccess.org
+conformant:
+  - standard: saml
+    status: conformant
+    operator: federation
+    detail: >-
+      UCSI operates a Microsoft Entra ID tenant, 3c5f2d31-81d8-4455-a2bf-531fbc398144, whose SAML 2.0
+      federation metadata is publicly retrievable and signed. The document carries an IDPSSODescriptor
+      with entityID https://sts.windows.net/3c5f2d31-81d8-4455-a2bf-531fbc398144/, SingleSignOnService
+      bindings for HTTP-POST and HTTP-Redirect, and protocolSupportEnumeration for SAML 2.0 plus
+      WS-Federation. The realm is NameSpaceType "Managed" — cloud-native, not federated to an
+      on-premises AD FS — so the SAML IdP described is UCSI's own identity provider, and its
+      FederationBrandName is literally "UCSI University".
+    evidence:
+      - url: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+        status: 200
+        locator: EntityDescriptor entityID="https://sts.windows.net/3c5f2d31-81d8-4455-a2bf-531fbc398144/" / IDPSSODescriptor
+      - url: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+        status: 200
+        locator: issuer = https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/v2.0
+      - url: https://login.microsoftonline.com/getuserrealm.srf?login=user@ucsiuniversity.edu.my&json=1
+        status: 200
+        locator: NameSpaceType = Managed, DomainName = ucsiuniversity.edu.my, FederationBrandName = "UCSI University"
+unverifiable:
+  - standard: oai-pmh
+    status: unverifiable
+    operator: institution
+    detail: >-
+      koha.ucsiuniversity.edu.my runs a Koha integrated library system on UCSI's own registrable
+      domain, and Koha ships an OAI-PMH 2.0 data provider at /cgi-bin/koha/oai.pl plus an ILS-DI
+      service and a /api/v1 REST API. Whether UCSI has those services switched on cannot be
+      established: Cloudflare answers 403 to every automated request against the host, so the negative
+      is about our access, not about their configuration. Not recorded as conformant and not recorded
+      as absent.
+    evidence:
+      - url: https://koha.ucsiuniversity.edu.my/cgi-bin/koha/oai.pl?verb=Identify
+        status: 403
+        locator: Cloudflare bot challenge (server = cloudflare)
+      - url: https://koha.ucsiuniversity.edu.my/api/v1/
+        status: 403
+        locator: Cloudflare bot challenge
+      - url: https://koha.ucsiuniversity.edu.my/cgi-bin/koha/ilsdi.pl
+        status: 403
+        locator: Cloudflare bot challenge
+  - standard: lti
+    status: unverifiable
+    operator: tenant
+    detail: >-
+      UCSI's learning management system is a CourseNetworking tenancy (lms.ucsiuniversity.edu.my 301s
+      to ucsi.thecn.com). CourseNetworking is an LTI-capable platform, but no LTI registration,
+      platform configuration or tool-deployment surface is publicly reachable for UCSI's tenancy, and
+      any LTI conformance in that deployment would be the vendor's implementation rather than UCSI's.
+      Recorded as unverifiable rather than claimed.
+    evidence:
+      - url: http://lms.ucsiuniversity.edu.my/
+        status: 301
+        locator: Location = https://ucsi.thecn.com/
+      - url: https://ucsi.thecn.com/
+        status: 200
+        locator: UCSI University branded CourseNetworking login
+not_found:
+  - standard: shibboleth
+    detail: >-
+      UCSI has no Shibboleth/SAML entity in eduGAIN. The full eduGAIN metadata aggregate was downloaded
+      (93MB, 2026-09-01) and every occurrence of the string "ucsi" in it falls inside base64 certificate
+      material — there is no UCSI entityID, organisation name or DisplayName. Malaysia's national
+      federation SIFULAN (eduGAIN member since 2018-07-16, 152 entities registered under
+      registrationAuthority https://sifulan.my) carries no UCSI entity either, and the SeamlessAccess
+      metadata search returns an empty array. Identity federation runs through Entra ID instead —
+      recorded under `saml` above.
+    evidence:
+      - url: https://mds.edugain.org/edugain-v2.xml
+        status: 200
+        locator: no UCSI entityID or organisation name in the aggregate
+      - url: https://md.seamlessaccess.org/entities/?q=ucsi
+        status: 200
+        locator: "[] (empty result set)"
+  - standard: crossref
+    detail: >-
+      No Crossref member, journal or prefix matching UCSI exists. The institution does not appear to
+      register DOIs through Crossref under its own name.
+    evidence:
+      - url: https://api.crossref.org/members?query=UCSI&rows=5
+        status: 200
+        locator: message.total-results = 0
+      - url: https://api.crossref.org/journals?query=UCSI&rows=5
+        status: 200
+        locator: message.total-results = 0
+  - standard: datacite
+    detail: No DataCite provider or repository client is registered under a name matching UCSI.
+    evidence:
+      - url: https://api.datacite.org/clients?query=UCSI
+        status: 200
+        locator: meta.total = 0
+      - url: https://api.datacite.org/providers?query=UCSI
+        status: 200
+        locator: meta.total = 0
+  - standard: scim
+    detail: >-
+      No institution-operated SCIM provisioning endpoint was found or advertised. The Entra ID tenant
+      exposes Microsoft's SCIM implementation only to authenticated tenant administrators, which is
+      Microsoft's surface, not UCSI's.
+  - standard: oneroster
+    detail: No OneRoster endpoint was found; the student information system (iis.ucsiuniversity.edu.my) is not publicly exposed.
+  - standard: ed-fi
+    detail: Ed-Fi is a US K-12 / state-education-agency standard and is not applicable to a Malaysian private university.
+  - standard: caliper
+    detail: No Caliper analytics endpoint was found or advertised on any UCSI host or in the CourseNetworking tenancy.
+  - standard: qti
+    detail: No QTI assessment surface is publicly reachable.
+  - standard: orcid
+    detail: >-
+      No institution-operated ORCID integration surface was found. UCSI has no institutional repository
+      or CRIS on its own domain that could carry one, and no ORCID member record under its own name was
+      evidenced.

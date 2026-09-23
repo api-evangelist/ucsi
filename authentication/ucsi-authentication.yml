@@ -1,0 +1,82 @@
+---
+name: UCSI University Identity Authentication
+description: >-
+  What can actually be established about how a client authenticates against anything UCSI University
+  operates. UCSI publishes no public API and no developer documentation, so this artifact describes
+  the one authentication surface that is publicly readable: the OpenID Connect / SAML 2.0 metadata of
+  the institution's own Microsoft Entra ID tenant. It is a record of a probed discovery document, not
+  a description of an API programme UCSI does not run. Access to a UCSI application still requires a
+  UCSI-issued account and an application registration inside the tenant; there is no self-serve
+  onboarding.
+generated: '2026-09-01'
+method: probed
+source: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+x-operator: federation
+summary:
+  types:
+    - oauth2
+    - openIdConnect
+    - saml2
+  oauth2_flows:
+    - authorizationCode
+    - implicit
+    - deviceCode
+schemes:
+  - name: entraOpenIdConnect
+    type: openIdConnect
+    openIdConnectUrl: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+    issuer: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/v2.0
+    tenant_id: 3c5f2d31-81d8-4455-a2bf-531fbc398144
+    tenant_region_scope: AS
+    federation_brand_name: UCSI University
+    namespace_type: Managed
+    authorization_endpoint: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/oauth2/v2.0/authorize
+    token_endpoint: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/oauth2/v2.0/token
+    device_authorization_endpoint: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/oauth2/v2.0/devicecode
+    end_session_endpoint: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/oauth2/v2.0/logout
+    userinfo_endpoint: https://graph.microsoft.com/oidc/userinfo
+    jwks_uri: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/discovery/v2.0/keys
+    response_types_supported:
+      - code
+      - id_token
+      - code id_token
+      - id_token token
+    scopes_supported:
+      - openid
+      - profile
+      - email
+      - offline_access
+    token_endpoint_auth_methods_supported:
+      - client_secret_post
+      - client_secret_basic
+      - private_key_jwt
+      - self_signed_tls_client_auth
+    id_token_signing_alg_values_supported:
+      - RS256
+    subject_types_supported:
+      - pairwise
+    sources:
+      - https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+      - https://login.microsoftonline.com/getuserrealm.srf?login=user@ucsiuniversity.edu.my&json=1
+  - name: entraSaml2
+    type: saml2
+    entity_id: https://sts.windows.net/3c5f2d31-81d8-4455-a2bf-531fbc398144/
+    metadata_url: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+    role: IDPSSODescriptor
+    protocols:
+      - urn:oasis:names:tc:SAML:2.0:protocol
+      - http://docs.oasis-open.org/wsfed/federation/200706
+    single_sign_on_service:
+      - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+        location: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/saml2
+      - binding: urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+        location: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/saml2
+    sources:
+      - https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+notes:
+  - >-
+    The contract behind both schemes is Microsoft's; the TENANT, its branding, its domain and the
+    accounts inside it are UCSI's. Recorded as x-operator federation for that reason.
+  - >-
+    No authentication scheme could be established for koha.ucsiuniversity.edu.my, iis.ucsiuniversity.edu.my
+    or any other institution host: Cloudflare returns 403 to automated clients across the estate.

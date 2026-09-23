@@ -3,7 +3,7 @@ name: UCSI University
 description: UCSI University public developer/API footprint review for APIs.json cataloging.
 url: https://raw.githubusercontent.com/api-evangelist/ucsi/refs/heads/main/review.yml
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-09-01'
 reviews:
   - date: '2026-06-03'
     rating: 1
@@ -37,3 +37,61 @@ reviews:
       - url: https://www.linkedin.com/school/ucsi-education/
         status: 999
         note: Official LinkedIn school page; 999 is LinkedIn anti-bot, page exists.
+  - date: '2026-09-01'
+    rating: 2
+    summary: >-
+      Re-profiled under the API Evangelist university pipeline, which settles WHO OPERATES each surface
+      before saving anything. UCSI's whole ucsiuniversity.edu.my estate is behind a Cloudflare bot
+      challenge (cf-mitigated: challenge) that returns 403 to automated clients even with full browser
+      headers, so no institution-hosted contract can be read — recorded as unreadable / bot_blocked
+      rather than as an absence. Three surfaces were established off-host and none of them existed in
+      the June 2026 profile: a Microsoft Entra ID tenant (3c5f2d31-81d8-4455-a2bf-531fbc398144, brand
+      "UCSI University", Managed realm) publishing signed SAML 2.0 IdP metadata and an OIDC discovery
+      document — the institution's own identity provider and its strongest programmable surface; a
+      CourseNetworking LMS tenancy that lms.ucsiuniversity.edu.my 301s into at ucsi.thecn.com; and a
+      ROR registration. Confirmed absences: no UCSI entity anywhere in the eduGAIN aggregate, none in
+      Malaysia's SIFULAN federation, no Crossref member, no DataCite client, no verifiable official
+      GitHub organisation (the "UCSI" and "UCSI-University" orgs carry no metadata and zero public
+      repositories). No OpenAPI was generated for the Koha catalogue: Koha's OAI-PMH, ILS-DI and REST
+      services may be enabled but nobody has read them through the challenge, and generating a contract
+      would credit UCSI with a document that has never been seen.
+    endpoints:
+      - url: https://login.microsoftonline.com/ucsiuniversity.edu.my/v2.0/.well-known/openid-configuration
+        status: 200
+        note: Entra ID OIDC discovery; issuer resolves to tenant 3c5f2d31-81d8-4455-a2bf-531fbc398144.
+      - url: https://login.microsoftonline.com/3c5f2d31-81d8-4455-a2bf-531fbc398144/federationmetadata/2007-06/federationmetadata.xml
+        status: 200
+        note: Signed SAML 2.0 IdP metadata, entityID https://sts.windows.net/3c5f2d31-81d8-4455-a2bf-531fbc398144/.
+      - url: https://login.microsoftonline.com/getuserrealm.srf?login=user@ucsiuniversity.edu.my&json=1
+        status: 200
+        note: NameSpaceType Managed, FederationBrandName "UCSI University".
+      - url: http://lms.ucsiuniversity.edu.my/
+        status: 301
+        note: Redirects to https://ucsi.thecn.com/ — CourseNetworking LMS tenancy (CNAME ucsi.thecn.com).
+      - url: https://ucsi.thecn.com/
+        status: 200
+        note: UCSI-branded CourseNetworking sign-in; vendor platform, institution tenancy.
+      - url: https://api.ror.org/v2/organizations/019787q29
+        status: 200
+        note: ROR registration, active, Kuala Lumpur; GRID grid.444472.5, ISNI 0000 0004 1756 3061.
+      - url: https://api.crossref.org/members?query=UCSI
+        status: 200
+        note: total-results 0 — no Crossref membership under the UCSI name.
+      - url: https://api.datacite.org/clients?query=UCSI
+        status: 200
+        note: meta.total 0 — no DataCite repository client.
+      - url: https://md.seamlessaccess.org/entities/?q=ucsi
+        status: 200
+        note: Empty array; eduGAIN aggregate download confirms no UCSI entity, SIFULAN included.
+      - url: https://www.ucsiuniversity.edu.my/
+        status: 403
+        note: Cloudflare challenge with browser UA and full browser headers; live for humans, unreadable to clients.
+      - url: https://koha.ucsiuniversity.edu.my/cgi-bin/koha/oai.pl?verb=Identify
+        status: 403
+        note: Koha OAI-PMH could not be confirmed enabled or disabled; unverifiable, not absent.
+      - url: https://iis.ucsiuniversity.edu.my/
+        status: 403
+        note: Integrated Information System (student portal) exists on UCSI's domain; gated and bot-blocked.
+      - url: https://api.ucsiuniversity.edu.my/
+        status: 0
+        note: No DNS record. Same for developer., data., courses., portal., idp., journals.
